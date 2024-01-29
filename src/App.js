@@ -1,24 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import AuthConditionalNavbar from './utility/AuthConditionalNavbar';
+import Home from './components/Home';
+import Login from './utility/Login';
+import ViewUsers from './pages/Users/ViewUsers';
+import MyProducts from './pages/Users/MyProducts';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const storedAuth = sessionStorage.getItem('authToken');
+    return storedAuth !== null;
+  });
+
+  useEffect(() => {
+    const authToken = sessionStorage.getItem('authToken');
+    setIsAuthenticated(authToken !== null);
+  }, []);
+
+  const handleLogout = () => {
+    // Perform logout actions, clear session data, etc.
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('authToken');
+
+    setIsAuthenticated(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <Home />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/login"
+            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+          />
+          {/* Private route, only accessible if authenticated */}
+          <Route
+            path="/users/all-users"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <ViewUsers />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* Private route, only accessible if authenticated */}
+          <Route
+            path="/user/my-products"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <MyProducts />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

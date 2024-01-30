@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -6,7 +6,14 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Retrieve userRole from local storage
+    const storedUserRole = localStorage.getItem('userRole');
+    setUserRole(storedUserRole);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -33,18 +40,35 @@ const Navbar = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
-            <Link to="/users/all-users">All Users</Link>
-          </li>
-          <li>
-            <Link to="/users/all-products">All Products</Link>
-          </li>
-          <li>
-            <Link to="/user/my-products">My Products</Link>
-          </li>
-          <li>
-            <Link to="/users/assign-products">Assign Products</Link>
-          </li>
+          {userRole === 'Admin' && (
+            <>
+              <li>
+                <Link to="/users/all-users">All Users</Link>
+              </li>
+              <li>
+                <Link to="/users/all-products">All Products</Link>
+              </li>
+              <li>
+                <Link to="/users/service-request">Service Request</Link>
+              </li>
+              <li>
+                <Link to="/users/my-request">My Service Request</Link>
+              </li>
+            </>
+          )}
+          {userRole === 'User' && (
+            <>
+              <li>
+                <Link to="/user/all-products">All Products</Link>
+              </li>
+              <li>
+                <Link to="/user/my-products">My Products</Link>
+              </li>
+              <li>
+                <Link to="/users/my-request">My Service Request</Link>
+              </li>
+            </>
+          )}
           <li>
             <button onClick={handleLogout}>Logout</button>
           </li>

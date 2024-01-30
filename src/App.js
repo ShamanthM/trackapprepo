@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Login from './utility/Login';
 import ViewUsers from './pages/Users/ViewUsers';
 import MyProducts from './pages/Users/MyProducts';
+import AllProducts from './pages/Products/AllProducts'; // Import the AllProducts component
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -72,6 +73,20 @@ function App() {
                 <>
                   <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
                   <MyProducts />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* New route for All Products */}
+          <Route
+            path="/user/all-products"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <AllProducts />
                 </>
               ) : (
                 <Navigate to="/login" />

@@ -46,13 +46,13 @@ const Navbar = () => {
                 <Link to="/users/all-users">All Users</Link>
               </li>
               <li>
-                <Link to="/users/all-products">All Products</Link>
+                <Link to="/user/all-products">All Products</Link>
               </li>
               <li>
-                <Link to="/users/service-request">Service Request</Link>
+                <Link to="/user/assign-product">Assign Products</Link>
               </li>
               <li>
-                <Link to="/users/my-request">My Service Request</Link>
+                <Link to="/user/service-request">Service Request</Link>
               </li>
             </>
           )}
@@ -65,7 +65,7 @@ const Navbar = () => {
                 <Link to="/user/my-products">My Products</Link>
               </li>
               <li>
-                <Link to="/users/my-request">My Service Request</Link>
+                <Link to="/user/my-request">My Service Request</Link>
               </li>
             </>
           )}

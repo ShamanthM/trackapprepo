@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AuthConditionalNavbar from './utility/AuthConditionalNavbar';
@@ -7,7 +5,8 @@ import Home from './components/Home';
 import Login from './utility/Login';
 import ViewUsers from './pages/Users/ViewUsers';
 import MyProducts from './pages/Users/MyProducts';
-import AllProducts from './pages/Products/AllProducts'; // Import the AllProducts component
+import AllProducts from './pages/Products/AllProducts';
+import AssignProduct from './pages/Products/AssignProduct'; // Import the AssignProduct component
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -87,6 +86,20 @@ function App() {
                 <>
                   <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
                   <AllProducts />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* New route for AssignProduct */}
+          <Route
+            path="/user/assign-product"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <AssignProduct />
                 </>
               ) : (
                 <Navigate to="/login" />

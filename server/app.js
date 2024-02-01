@@ -9,6 +9,7 @@ const productAccessoryRoutes = require('./routes/productAccessoryRoutes');
 const accessoryRoutes = require('./routes/accessoryRoutes');
 const accessoryAssignedRoutes = require('./routes/accessoryAssignedRoutes');
 const userProductAccessoryRoutes = require('./routes/userProductAccessoryRoutes');
+const serviceAssignRoutes = require('./routes/serviceAssignRoutes');
 const AuthenticationController = require('./controllers/AuthController');  // Import AuthenticationController
 const AuthService = require('./services/AuthService');  // Import AuthService
 
@@ -33,6 +34,7 @@ app.use('/productaccessories', productAccessoryRoutes);
 app.use('/accessory', accessoryRoutes);
 app.use('/accessoryassigned', accessoryAssignedRoutes);
 app.use('/userProductAccessories', userProductAccessoryRoutes);
+app.use('/serviceassignments', serviceAssignRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

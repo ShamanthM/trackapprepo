@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import './Navbar.css';
-
+import company from '../images/Company.jpg';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -39,7 +39,7 @@ const Navbar = () => {
     <nav id="navbar" className="navbar">
       <div className="nav-wrapper">
         <div className="logo">
-          <img src="/images/CompanyLogo.png" alt="Company Logo" />
+          <img src={company} alt="Company Logo" style={{ width: `112px` }} />
         </div>
         <ul id="menu" className={isMenuOpen ? 'overlay-menu' : ''}>
           <li>
@@ -85,7 +85,14 @@ const Navbar = () => {
             </>
           )}
           <li>
-            <button onClick={handleLogout}>Logout</button>
+            <button className='btn btn-primary' style={{
+              backgroundColor: '#007BFF', // Change color as needed
+              border: 'none',
+              color: 'white',
+              padding: '10px 20px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }} onClick={handleLogout}>Logout</button>
           </li>
         </ul>
       </div>

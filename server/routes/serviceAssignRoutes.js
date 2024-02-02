@@ -1,26 +1,39 @@
 const express = require('express');
+const { body } = require('express-validator');
+const ServiceAssignController = require('../controllers/serviceAssignController');
+
 const router = express.Router();
-const {
-  createAssignment,
-  getAllAssignments,
-  getAssignmentById,
-  updateAssignment,
-  deleteAssignment,
-} = require('../controllers/serviceAssignController');
 
-// Create a new service assignment
-router.post('/', createAssignment);
+router.get('/', ServiceAssignController.getAllServiceAssignments);
 
-// Get all service assignments
-router.get('/', getAllAssignments);
+router.get('/:id', ServiceAssignController.getServiceAssignmentById);
 
-// Get a specific service assignment by ID
-router.get('/:assignmentId', getAssignmentById);
+router.post(
+  '/',
+  [
+    body('UserID').notEmpty().isInt(),
+    body('ProductName').notEmpty(),
+    body('SerialNumber').notEmpty(),
+    body('ServiceStatus').notEmpty(),
+    body('Description').optional(),
+  ],
+  ServiceAssignController.createServiceAssignment
+);
 
-// Update a service assignment by ID
-router.put('/:assignmentId', updateAssignment);
+router.put(
+  '/:id',
+  [
+    body('UserID').notEmpty().isInt(),
+    body('ProductName').notEmpty(),
+    body('SerialNumber').notEmpty(),
+    body('ServiceStatus').notEmpty(),
+    body('Description').optional(),
+  ],
+  ServiceAssignController.updateServiceAssignment
+);
 
-// Delete a service assignment by ID
-router.delete('/:assignmentId', deleteAssignment);
+router.delete('/:id', ServiceAssignController.deleteServiceAssignment);
+
+// Add other routes as needed
 
 module.exports = router;

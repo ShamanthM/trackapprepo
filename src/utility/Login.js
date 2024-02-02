@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
+// Import the image
+import homeImage from '../images/Home.jpg';
+
 const Login = ({ setIsAuthenticated }) => {
   const [isSignIn, setIsSignIn] = useState(true);
   const navigate = useNavigate();
@@ -46,7 +49,7 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ backgroundImage: `url(${homeImage})`, backgroundSize: 'cover' }}>
       <div className={`frame ${isSignIn ? '' : 'frame-long'}`}>
         <form className={`form-${isSignIn ? 'signin' : 'signup'}`} onSubmit={handleSubmit}>
           <label>Email:</label>

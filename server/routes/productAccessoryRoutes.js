@@ -1,11 +1,36 @@
-// src/routes/productAccessoryRoutes.js
 const express = require('express');
-const router = express.Router();
+const { body } = require('express-validator');
 const ProductAccessoryController = require('../controllers/productAccessoryController');
 
-router.get('/product/:productId', ProductAccessoryController.getProductAccessoriesByProductId);
-router.post('/', ProductAccessoryController.createProductAccessory);
-router.put('/:productAccessoryId', ProductAccessoryController.updateProductAccessory);
-router.delete('/:productAccessoryId', ProductAccessoryController.deleteProductAccessory);
+const router = express.Router();
+
+router.get('/', ProductAccessoryController.getAllProductAccessories);
+
+router.get('/:productId', ProductAccessoryController.getProductAccessoryByProductId);
+
+router.post(
+  '/',
+  [
+    body('ProductID').notEmpty().isInt(),
+    body('AccessoryID').notEmpty().isInt(),
+    body('Quantity').notEmpty().isInt(),
+  ],
+  ProductAccessoryController.createProductAccessory
+);
+
+router.put(
+  '/',
+  [
+    body('ProductID').notEmpty().isInt(),
+    body('AccessoryID').notEmpty().isInt(),
+    body('Quantity').notEmpty().isInt(),
+  ],
+  ProductAccessoryController.updateProductAccessory
+);
+
+router.delete('/', ProductAccessoryController.deleteProductAccessory);
+
+// Corrected route for fetching accessory report based on product ID
+router.get('/report/:productId', ProductAccessoryController.getProductAccessoryByProductId);
 
 module.exports = router;

@@ -7,6 +7,7 @@ import './Navbar.css';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const [showServiceRequestDropdown, setShowServiceRequestDropdown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,10 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleServiceRequestDropdown = () => {
+    setShowServiceRequestDropdown(!showServiceRequestDropdown);
   };
 
   const handleLogout = () => {
@@ -52,7 +57,17 @@ const Navbar = () => {
                 <Link to="/user/assign-product">Assign Products</Link>
               </li>
               <li>
-                <Link to="/user/service-request">Service Request</Link>
+                <div className="dropdown">
+                  <Link to="#" onClick={toggleServiceRequestDropdown}>
+                    Service Request
+                  </Link>
+                  {showServiceRequestDropdown && (
+                    <div className="dropdown-content">
+                      <Link to="/user/new-service-requests">New Service Requests</Link>
+                      <Link to="/user/service-requests">Service Requests</Link>
+                    </div>
+                  )}
+                </div>
               </li>
             </>
           )}

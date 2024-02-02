@@ -6,6 +6,7 @@ class UserProductAssignmentController {
     const { userId } = req.params;
     try {
       const userAssignments = await UserProductAssignmentService.getUserAssignmentsByUserId(userId);
+      console.log(userAssignments);
       res.json(userAssignments);
     } catch (error) {
       console.error(error);

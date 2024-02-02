@@ -1,75 +1,52 @@
-// services/serviceAssignService.js
-const { ServiceAssign } = require('../models/ServiceAssign');
+const ServiceAssign = require('../models/ServiceAssign');
 
-const createServiceAssignment = async (assignmentData) => {
-  try {
-    const serviceAssignment = await ServiceAssign.create(assignmentData);
-    return serviceAssignment;
-  } catch (error) {
-    console.error('Error creating service assignment:', error);
-    throw new Error(`Error creating service assignment: ${error.message}`);
+class ServiceAssignService {
+  static async getAllServiceAssignments() {
+    return await ServiceAssign.findAll();
   }
-};
 
-const getAllServiceAssignments = async () => {
-  try {
-    console.log('Before findAll');
-    const serviceAssignments = await ServiceAssign.findAll();
-    console.log('After findAll');
-    return serviceAssignments;
-  } catch (error) {
-    console.error('Error fetching service assignments:', error);
-    throw new Error(`Error fetching service assignments: ${error.message}`);
+  static async getServiceAssignmentById(assignmentId) {
+    return await ServiceAssign.findByPk(assignmentId);
   }
-};
 
-const getServiceAssignmentById = async (assignmentId) => {
-  try {
+  static async createServiceAssignment({ UserID, UserName, ProductName, SerialNumber, ServiceStatus, Description }) {
+    return await ServiceAssign.create({
+      UserID,
+      UserName,
+      ProductName,
+      SerialNumber,
+      ServiceStatus,
+      Description,
+    });
+  }
+
+  static async updateServiceAssignment(assignmentId, { UserID, ProductName, SerialNumber, ServiceStatus, Description }) {
     const serviceAssignment = await ServiceAssign.findByPk(assignmentId);
+
+    if (!serviceAssignment) {
+      return null; // Or throw an error, depending on your error handling strategy
+    }
+
+    serviceAssignment.UserID = UserID;
+    serviceAssignment.ProductName = ProductName;
+    serviceAssignment.SerialNumber = SerialNumber;
+    serviceAssignment.ServiceStatus = ServiceStatus;
+    serviceAssignment.Description = Description;
+
+    await serviceAssignment.save();
     return serviceAssignment;
-  } catch (error) {
-    console.error('Error fetching service assignment:', error);
-    throw new Error(`Error fetching service assignment: ${error.message}`);
   }
-};
 
-const updateServiceAssignment = async (assignmentId, updatedData) => {
-  try {
-    const [rowsAffected, [updatedAssignment]] = await ServiceAssign.update(updatedData, {
-      where: { AssignmentID: assignmentId },
-      returning: true,
-    });
+  static async deleteServiceAssignment(assignmentId) {
+    const serviceAssignment = await ServiceAssign.findByPk(assignmentId);
 
-    if (rowsAffected === 0) {
-      throw new Error(`Service assignment with ID ${assignmentId} not found.`);
+    if (!serviceAssignment) {
+      return false; // Or throw an error, depending on your error handling strategy
     }
 
-    return updatedAssignment;
-  } catch (error) {
-    console.error('Error updating service assignment:', error);
-    throw new Error(`Error updating service assignment: ${error.message}`);
+    await serviceAssignment.destroy();
+    return true;
   }
-};
+}
 
-const deleteServiceAssignment = async (assignmentId) => {
-  try {
-    const rowsAffected = await ServiceAssign.destroy({
-      where: { AssignmentID: assignmentId },
-    });
-
-    if (rowsAffected === 0) {
-      throw new Error(`Service assignment with ID ${assignmentId} not found.`);
-    }
-  } catch (error) {
-    console.error('Error deleting service assignment:', error);
-    throw new Error(`Error deleting service assignment: ${error.message}`);
-  }
-};
-
-module.exports = {
-  createServiceAssignment,
-  getAllServiceAssignments,
-  getServiceAssignmentById,
-  updateServiceAssignment,
-  deleteServiceAssignment,
-};
+module.exports = ServiceAssignService;

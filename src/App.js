@@ -6,7 +6,8 @@ import Login from './utility/Login';
 import ViewUsers from './pages/Users/ViewUsers';
 import MyProducts from './pages/Users/MyProducts';
 import AllProducts from './pages/Products/AllProducts';
-import AssignProduct from './pages/Products/AssignProduct'; // Import the AssignProduct component
+import AssignProduct from './pages/Products/AssignProduct';
+import NewServiceRequest from './pages/ServiceRequests/newServiceRequest'; // Import the NewServiceRequest component
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -100,6 +101,20 @@ function App() {
                 <>
                   <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
                   <AssignProduct />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* New route for NewServiceRequest */}
+          <Route
+            path="/user/new-service-requests"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <NewServiceRequest />
                 </>
               ) : (
                 <Navigate to="/login" />

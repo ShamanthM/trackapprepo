@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
     timestamps: false,
   },
   pool: {
-    max: 10, // Adjust based on your application's needs
+    max: 10, 
     min: 0,
     acquire: 30000,
     idle: 10000,

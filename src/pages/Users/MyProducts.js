@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Modal, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Modal,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box,
+  Grid,
+} from '@mui/material';
+import './MyProducts.css'; // Import your custom styles
 
 const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
@@ -15,8 +31,6 @@ const MyProducts = () => {
       try {
         const response = await fetch(`http://localhost:8080/userProductAccessories/getUserProductAccessoriesDetails/${userName}`);
        
-        console.log(response);
-
         if (response.ok) {
           const data = await response.json();
           setUserProducts(data);
@@ -32,42 +46,33 @@ const MyProducts = () => {
   }, [userName]);
 
   const handleCardClick = (productData) => {
-    // Extract and set the accessories data for the selected product
     setSelectedProductAccessories(productData);
-    // Open the popup
     setPopupOpen(true);
   };
 
   const handleClosePopup = () => {
-    // Close the popup
     setPopupOpen(false);
   };
 
   return (
     <div>
       <h2>My Products</h2>
-      {userProducts.map((productObject, index) => (
-        <div key={index}>
-          {Object.keys(productObject).map((key) => {
-            if (!isNaN(key)) {
-              const productData = productObject[key];
-              return (
-                <Card key={key} className="card" onClick={() => handleCardClick(productData)}>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {productData.ProductName}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Serial Number: {productData.ProductSerialNumber}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              );
-            }
-            return null; 
-          })}
-        </div>
-      ))}
+      <Grid container spacing={2}>
+        {userProducts.map((productData) => (
+          <Grid key={productData.ProductID} item xs={12} sm={6} md={4}>
+            <Card className="card" onClick={() => handleCardClick(productData)}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {productData.ProductName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Serial Number: {productData.ProductSerialNumber}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
       
       {/* Popup to display accessories data */}
       <Modal open={isPopupOpen} onClose={handleClosePopup}>
@@ -80,26 +85,20 @@ const MyProducts = () => {
                     <TableHead>
                       <TableRow>
                         <TableCell>Accessory Name</TableCell>
-                        <TableCell>Serial Number</TableCell>
-                        <TableCell>Quantity</TableCell>
                         {/* Add more table headers as needed */}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {Array.isArray(selectedProductAccessories) ? (
-                        selectedProductAccessories.map((accessory, index) => (
+                      {Array.isArray(selectedProductAccessories.AccessoriesList) ? (
+                        selectedProductAccessories.AccessoriesList.map((accessory, index) => (
                           <TableRow key={index}>
-                            <TableCell>{accessory.AccessoryName}</TableCell>
-                            <TableCell>{accessory.AccessorySerialNumber}</TableCell>
-                            <TableCell>{accessory.AccessoryQuantity}</TableCell>
+                            <TableCell>{accessory}</TableCell>
                             {/* Add more table cells as needed */}
                           </TableRow>
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell>{selectedProductAccessories.AccessoryName}</TableCell>
-                          <TableCell>{selectedProductAccessories.AccessorySerialNumber}</TableCell>
-                          <TableCell>{selectedProductAccessories.AccessoryQuantity}</TableCell>
+                          <TableCell>{selectedProductAccessories.AccessoriesList}</TableCell>
                           {/* Add more table cells as needed */}
                         </TableRow>
                       )}

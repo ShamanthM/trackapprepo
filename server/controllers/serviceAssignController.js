@@ -1,76 +1,97 @@
-// controllers/serviceAssignController.js
-const {
-    createServiceAssignment,
-    getAllServiceAssignments,
-    getServiceAssignmentById,
-    updateServiceAssignment,
-    deleteServiceAssignment,
-  } = require('../services/serviceAssignService');
-  
-  const createAssignment = async (req, res) => {
+const ServiceAssign = require('../models/ServiceAssign');
+const { validationResult } = require('express-validator');
+const ServiceAssignService = require('../services/serviceAssignService');
+
+class ServiceAssignController {
+  static async getAllServiceAssignments(req, res, next) {
     try {
-      const assignmentData = req.body;
-      const serviceAssignment = await createServiceAssignment(assignmentData);
-      res.json(serviceAssignment);
-    } catch (error) {
-      console.error('Error creating service assignment:', error);
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  const getAllAssignments = async (req, res) => {
-    try {
-      const serviceAssignments = await getAllServiceAssignments();
+      const serviceAssignments = await ServiceAssignService.getAllServiceAssignments();
       res.json(serviceAssignments);
     } catch (error) {
-      console.error('Error fetching service assignments:', error);
-      res.status(500).json({ error: error.message });
+      next(error);
     }
-  };
-  
-  const getAssignmentById = async (req, res) => {
+  }
+
+  static async getServiceAssignmentById(req, res, next) {
+    const assignmentId = req.params.id;
     try {
-      const { assignmentId } = req.params;
-      const serviceAssignment = await getServiceAssignmentById(assignmentId);
+      const serviceAssignment = await ServiceAssignService.getServiceAssignmentById(assignmentId);
       if (!serviceAssignment) {
-        res.status(404).json({ error: 'Service assignment not found.' });
-        return;
+        res.status(404).json({ message: 'Service Assignment not found' });
+      } else {
+        res.json(serviceAssignment);
       }
-      res.json(serviceAssignment);
     } catch (error) {
-      console.error('Error fetching service assignment:', error);
-      res.status(500).json({ error: error.message });
+      next(error);
     }
-  };
-  
-  const updateAssignment = async (req, res) => {
+  }
+
+  static async createServiceAssignment(req, res, next) {
+    const { UserID, ProductName, SerialNumber, ServiceStatus, Description } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
-      const { assignmentId } = req.params;
-      const updatedData = req.body;
-      const updatedAssignment = await updateServiceAssignment(assignmentId, updatedData);
-      res.json(updatedAssignment);
+      const newServiceAssignment = await ServiceAssignService.createServiceAssignment({
+        UserID,
+        ProductName,
+        SerialNumber,
+        ServiceStatus,
+        Description,
+      });
+
+      res.status(201).json(newServiceAssignment);
     } catch (error) {
-      console.error('Error updating service assignment:', error);
-      res.status(500).json({ error: error.message });
+      next(error);
     }
-  };
-  
-  const deleteAssignment = async (req, res) => {
+  }
+
+  static async updateServiceAssignment(req, res, next) {
+    const assignmentId = req.params.id;
+    const { UserID, ProductName, SerialNumber, ServiceStatus, Description } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
-      const { assignmentId } = req.params;
-      await deleteServiceAssignment(assignmentId);
-      res.json({ message: 'Service assignment deleted successfully.' });
+      const updatedServiceAssignment = await ServiceAssignService.updateServiceAssignment(assignmentId, {
+        UserID,
+        ProductName,
+        SerialNumber,
+        ServiceStatus,
+        Description,
+      });
+
+      if (!updatedServiceAssignment) {
+        res.status(404).json({ message: 'Service Assignment not found' });
+      } else {
+        res.json(updatedServiceAssignment);
+      }
     } catch (error) {
-      console.error('Error deleting service assignment:', error);
-      res.status(500).json({ error: error.message });
+      next(error);
     }
-  };
-  
-  module.exports = {
-    createAssignment,
-    getAllAssignments,
-    getAssignmentById,
-    updateAssignment,
-    deleteAssignment,
-  };
-  
+  }
+
+  static async deleteServiceAssignment(req, res, next) {
+    const assignmentId = req.params.id;
+
+    try {
+      const isDeleted = await ServiceAssignService.deleteServiceAssignment(assignmentId);
+
+      if (!isDeleted) {
+        res.status(404).json({ message: 'Service Assignment not found' });
+      } else {
+        res.json({ message: 'Service Assignment deleted successfully' });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+module.exports = ServiceAssignController;

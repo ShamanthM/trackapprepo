@@ -13,6 +13,10 @@ const ServiceAssign = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    UserName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     ProductName: {
       type: DataTypes.STRING,
       allowNull: false,

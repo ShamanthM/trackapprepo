@@ -1,6 +1,4 @@
-// app.js
 const express = require('express');
-const app = express();
 const sequelize = require('./context/sequelize-config');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -10,8 +8,10 @@ const accessoryRoutes = require('./routes/accessoryRoutes');
 const accessoryAssignedRoutes = require('./routes/accessoryAssignedRoutes');
 const userProductAccessoryRoutes = require('./routes/userProductAccessoryRoutes');
 const serviceAssignRoutes = require('./routes/serviceAssignRoutes');
-const AuthenticationController = require('./controllers/AuthController');  // Import AuthenticationController
-const AuthService = require('./services/AuthService');  // Import AuthService
+const AuthenticationController = require('./controllers/AuthController');
+const AuthService = require('./services/AuthService');
+
+const app = express();  // Create an instance of the Express application
 
 // Middleware to parse JSON requests
 app.use(express.json());

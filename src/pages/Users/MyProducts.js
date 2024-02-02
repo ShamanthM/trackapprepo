@@ -59,11 +59,11 @@ const MyProducts = () => {
       <h2>My Products</h2>
       <Grid container spacing={2}>
         {userProducts.map((productData) => (
-          <Grid key={productData.ProductID} item xs={12} sm={6} md={4}>
+          <Grid key={productData.ProductSerialNumber} item xs={12} sm={6} md={4}>
             <Card className="card" onClick={() => handleCardClick(productData)}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  {productData.ProductName}
+                  {productData.Product}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Serial Number: {productData.ProductSerialNumber}
@@ -73,7 +73,7 @@ const MyProducts = () => {
           </Grid>
         ))}
       </Grid>
-      
+
       {/* Popup to display accessories data */}
       <Modal open={isPopupOpen} onClose={handleClosePopup}>
         <Box className="popup">
@@ -85,22 +85,17 @@ const MyProducts = () => {
                     <TableHead>
                       <TableRow>
                         <TableCell>Accessory Name</TableCell>
-                        {/* Add more table headers as needed */}
+                        <TableCell>Quantity</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {Array.isArray(selectedProductAccessories.AccessoriesList) ? (
-                        selectedProductAccessories.AccessoriesList.map((accessory, index) => (
+                      {selectedProductAccessories.Accessories && (
+                        JSON.parse(selectedProductAccessories.Accessories).Accessories.map((accessory, index) => (
                           <TableRow key={index}>
-                            <TableCell>{accessory}</TableCell>
-                            {/* Add more table cells as needed */}
+                            <TableCell>{accessory['Accessory Name']}</TableCell>
+                            <TableCell>{accessory.Quantity}</TableCell>
                           </TableRow>
                         ))
-                      ) : (
-                        <TableRow>
-                          <TableCell>{selectedProductAccessories.AccessoriesList}</TableCell>
-                          {/* Add more table cells as needed */}
-                        </TableRow>
                       )}
                     </TableBody>
                   </Table>

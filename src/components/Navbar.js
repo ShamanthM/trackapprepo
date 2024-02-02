@@ -1,3 +1,5 @@
+// Navbar.js
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,12 +36,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav id="navbar">
+    <nav id="navbar" className="navbar">
       <div className="nav-wrapper">
         <div className="logo">
-          <Link to="/">
-            <FontAwesomeIcon icon={faBars} className="menuIcon" onClick={toggleMenu} />
-          </Link>
+          <img src="/images/CompanyLogo.png" alt="Company Logo" />
         </div>
         <ul id="menu" className={isMenuOpen ? 'overlay-menu' : ''}>
           <li>

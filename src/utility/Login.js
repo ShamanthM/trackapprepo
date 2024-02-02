@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 // Import the image
-import homeImage from '../images/Home.jpg';
+import homeImage from '../images/HomeBackground.jpg';
 
 const Login = ({ setIsAuthenticated }) => {
   const [isSignIn, setIsSignIn] = useState(true);

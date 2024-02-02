@@ -1,20 +1,25 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'z20.h.filess.io',
-  port: 3307,
-  database: 'trackapp_sooncalmis',
-  username: 'trackapp_sooncalmis',
-  password: '8e6e531bab35bf8c6c4f15cc58a82a314cfe7cd0',
+  dialect: 'mssql', // Use 'mssql' for Microsoft Azure SQL Database
+  host: 'quickcart1.database.windows.net',
+  port: 1433,
+  database: 'testdb',
+  username: 'akshay',
+  password: 'Quickcartdb98@',
   define: {
     timestamps: false,
   },
   pool: {
-    max: 10, 
+    max: 10,
     min: 0,
     acquire: 30000,
     idle: 10000,
+  },
+  dialectOptions: {
+    options: {
+      encrypt: true, // For Microsoft Azure SQL Database
+    },
   },
 });
 

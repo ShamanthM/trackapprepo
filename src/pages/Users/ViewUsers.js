@@ -1,5 +1,3 @@
-// ViewUsers.js
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Table,
@@ -28,9 +26,9 @@ import {
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
 } from '@mui/icons-material';
-
+ 
 import './ViewUsers.css';
-
+ 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,22 +37,27 @@ const ViewUsers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
-
+ 
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortColumn, setSortColumn] = useState('UserID');
-
+ 
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
-
+ 
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [editedUser, setEditedUser] = useState(null);
-
+ 
+  const [isAddUserDialogOpen, setAddUserDialogOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserRole, setNewUserRole] = useState('');
+ 
   const fetchUsers = useCallback(() => {
     axios
       .get('http://localhost:8080/users')
       .then((response) => {
         const data = response.data;
-
+ 
         if (Array.isArray(data) && data.length > 0) {
           setUsers(data);
           setLoading(false);
@@ -67,45 +70,45 @@ const ViewUsers = () => {
         setLoading(false);
       });
   }, []);
-
+ 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
-
+ 
   useEffect(() => {
     const filtered = users.filter(
       (user) =>
         user.UserName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.UserID.toString().includes(searchTerm)
     );
-
+ 
     setFilteredUsers(filtered);
   }, [users, searchTerm]);
-
+ 
   const handleEdit = (user) => {
     setEditedUser(user);
     setEditDialogOpen(true);
   };
-
+ 
   const openDeleteDialog = (user) => {
     setUserToDelete(user);
     setDeleteDialogOpen(true);
   };
-
+ 
   const closeDeleteDialog = () => {
     setUserToDelete(null);
     setDeleteDialogOpen(false);
   };
-
+ 
   const handleDelete = (user) => {
     axios
       .delete(`http://localhost:8080/users/${user.UserID}`)
       .then((response) => {
         console.log(`User with ID ${user.UserID} deleted successfully`);
-
+ 
         // Remove the deleted user from the state
         setUsers((prevUsers) => prevUsers.filter((u) => u.UserID !== user.UserID));
-
+ 
         // Close the delete dialog
         setDeleteDialogOpen(false);
       })
@@ -113,7 +116,7 @@ const ViewUsers = () => {
         console.error(`Error deleting user with ID ${user.UserID}:`, error);
       });
   };
-
+ 
   const handleTableHeaderClick = (column) => {
     if (column === sortColumn) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -122,24 +125,24 @@ const ViewUsers = () => {
       setSortOrder('asc');
     }
   };
-
+ 
   const handleUpdateUser = () => {
     if (!editedUser) {
       return;
     }
-
+ 
     axios
       .put(`http://localhost:8080/users/${editedUser.UserID}`, editedUser)
       .then((response) => {
         console.log(`User with ID ${editedUser.UserID} updated successfully`);
-
+ 
         // Update the user data in the state
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.UserID === editedUser.UserID ? editedUser : user
           )
         );
-
+ 
         // Close the edit dialog
         setEditDialogOpen(false);
         setEditedUser(null); // Clear the edited user
@@ -148,11 +151,36 @@ const ViewUsers = () => {
         console.error(`Error updating user with ID ${editedUser.UserID}:`, error);
       });
   };
-
+ 
+  const handleAddUser = () => {
+    // Prepare the new user data
+    const newUser = {
+      UserName: newUserName,
+      UserPassword: newUserPassword,
+      UserRole: newUserRole,
+    };
+ 
+    // Post the new user data to the API
+    axios
+      .post('http://localhost:8080/users', newUser)
+      .then((response) => {
+        console.log('User added successfully');
+ 
+        // Fetch the updated list of users
+        fetchUsers();
+ 
+        // Close the add user dialog
+        setAddUserDialogOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error adding user:', error);
+      });
+  };
+ 
   const sortedData = [...filteredUsers].sort((a, b) => {
     const isAsc = sortOrder === 'asc';
     const column = sortColumn;
-
+ 
     if (a[column] < b[column]) {
       return isAsc ? -1 : 1;
     } else if (a[column] > b[column]) {
@@ -161,10 +189,10 @@ const ViewUsers = () => {
       return 0;
     }
   });
-
+ 
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-
+ 
   return (
     <div className="view-users-container">
       <Typography variant="h4" gutterBottom></Typography>
@@ -182,6 +210,9 @@ const ViewUsers = () => {
           ),
         }}
       />
+      <Button onClick={() => setAddUserDialogOpen(true)} variant="contained" color="primary">
+        Add User
+      </Button>
       <TableContainer component={Paper} className="view-users-table-container">
         <Table className="view-users-table">
           <TableHead>
@@ -276,7 +307,7 @@ const ViewUsers = () => {
           className="view-users-pagination"
         />
       </TableContainer>
-
+ 
       {/* Edit User Dialog */}
       {editedUser && (
         <Dialog
@@ -325,8 +356,52 @@ const ViewUsers = () => {
           </DialogActions>
         </Dialog>
       )}
+ 
+      {/* Add User Dialog */}
+      <Dialog
+        open={isAddUserDialogOpen}
+        onClose={() => setAddUserDialogOpen(false)}
+        className="add-user-modal"
+      >
+        <DialogTitle className="add-user-title">Add User</DialogTitle>
+        <DialogContent className="add-user-content">
+          <TextField
+            label="User Name"
+            name="newUserName"
+            value={newUserName}
+            onChange={(e) => setNewUserName(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="User Password"
+            name="newUserPassword"
+            value={newUserPassword}
+            onChange={(e) => setNewUserPassword(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="User Role"
+            name="newUserRole"
+            value={newUserRole}
+            onChange={(e) => setNewUserRole(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions className="add-user-actions">
+          <Button onClick={handleAddUser} color="primary" className="add-user-save">
+            Save
+          </Button>
+          <Button onClick={() => setAddUserDialogOpen(false)} color="primary" className="add-user-cancel">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
-
+ 
 export default ViewUsers;
+ 

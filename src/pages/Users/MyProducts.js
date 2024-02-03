@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Modal,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Grid,
-} from '@mui/material';
+import { Card, CardContent, Table, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyProducts.css'; // Import your custom styles
 
 const MyProducts = () => {
@@ -22,7 +8,6 @@ const MyProducts = () => {
   const [selectedProductAccessories, setSelectedProductAccessories] = useState(null);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
-  // Parse the JSON string to get the actual object and then extract the 'userName' property
   const storedUserData = localStorage.getItem('userData');
   const { userName } = storedUserData ? JSON.parse(storedUserData) : {};
 
@@ -56,55 +41,62 @@ const MyProducts = () => {
 
   return (
     <div>
-      <h2>My Products</h2>
-      <Grid container spacing={2}>
-        {userProducts.map((productData) => (
-          <Grid key={productData.ProductSerialNumber} item xs={12} sm={6} md={4}>
-            <Card className="card" onClick={() => handleCardClick(productData)}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {productData.Product}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Serial Number: {productData.ProductSerialNumber}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      <header>
+        <img src="C:/Users/User/Downloads/logo.jpg" alt="MK SRINIVASAN SYSTEMS PRIVATE LIMITED" />
+        <div style={{ flexGrow: 1.5, marginTop: '60px' }}>MK SRINIVASAN SYSTEMS PRIVATE LIMITED</div>
+      </header>
 
-      {/* Popup to display accessories data */}
-      <Modal open={isPopupOpen} onClose={handleClosePopup}>
-        <Box className="popup">
+      <div id="search-bar">
+        <input type="text" id="search-input" placeholder="Search for serial number" />
+        <button id="search-button">Search</button>
+      </div>
+
+      <div id="highlighted-title">
+        DIGITAL EARTH RESISTANCE TESTER
+      </div>
+
+      <div className="product-container">
+        {userProducts.map((productData) => (
+          <div key={productData.ProductSerialNumber} className="product-column" onClick={() => handleCardClick(productData)}>
+            <h2>{productData.Product}</h2>
+            <img className="product-img" src={`C:/Users/User/Downloads/${productData.Product}.jpg`} alt={productData.Product} />
+            <div className="accessories-heading">Click on the product to see the AccessoriesData</div>
+          </div>
+        ))}
+      </div>
+
+      <Modal isOpen={isPopupOpen} toggle={handleClosePopup} centered>
+        <ModalHeader toggle={handleClosePopup}>
           {selectedProductAccessories && (
-            <Card className="card">
-              <CardContent>
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Accessory Name</TableCell>
-                        <TableCell>Quantity</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {selectedProductAccessories.Accessories && (
-                        JSON.parse(selectedProductAccessories.Accessories).Accessories.map((accessory, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{accessory['Accessory Name']}</TableCell>
-                            <TableCell>{accessory.Quantity}</TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-              <Button onClick={handleClosePopup}>Close</Button>
-            </Card>
+            <>
+              <h5>{selectedProductAccessories.Product}</h5>
+              <p>Serial Number: {selectedProductAccessories.ProductSerialNumber}</p>
+            </>
           )}
-        </Box>
+        </ModalHeader>
+        <ModalBody>
+          <div className="table-responsive">
+            <Table>
+              <thead>
+                <tr>
+                  <th>Accessory Name</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedProductAccessories?.Accessories && (
+                  JSON.parse(selectedProductAccessories.Accessories).Accessories.map((accessory, index) => (
+                    <tr key={index}>
+                      <td>{accessory['Accessory Name']}</td>
+                      <td>{accessory.Quantity}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </div>
+        </ModalBody>
+        <Button color="secondary" onClick={handleClosePopup}>Close</Button>
       </Modal>
     </div>
   );

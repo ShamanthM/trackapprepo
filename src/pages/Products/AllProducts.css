@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6ecf0; /* Light grayish blue background */
+  }
+  
+  header {
+    background-color: #3498db; /* Flat blue color */
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  header img {
+    width: 250px; /* Adjust the width of the logo */
+    height: 150px; /* Adjust the height of the logo */
+  }
+  
+  #search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  #search-input {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #95a5a6; /* Medium gray border */
+    border-radius: 4px 0 0 4px;
+  }
+  
+  #search-button {
+    padding: 8px 15px;
+    background-color: #000880; /* Flat blue color */
+    color: #fff;
+    border: 1px solid #3498db; /* Flat blue color */
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+  }
+  
+  #highlighted-title {
+    text-align: center;
+    font-size: 30px; /* Increased font size */
+    color: #000880; /* Highlighted color */
+    font-weight: bold; /* Bold text */
+    margin-bottom: 20px;
+  }
+  
+  /* Add this to the end of AllProducts.css */
+
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 10px; /* Adjust this value to decrease the space between cards */
+    padding-top: 80px; /* Adjust this value to add space from the top */
+    max-height: 600px; /* Adjust the max-height as needed */
+    overflow-y: auto; /* Add a vertical scroll bar when the content exceeds the max-height */
+  }
+  
+  
+  .product-column {
+    flex: 0 0 calc(45% - 20px); /* Adjust the width of each card */
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 5px solid #3498db;
+  }
+  
+  .product-img {
+    width: 40%;
+    max-width: 30%;
+    min-height: 10px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #3498db;
+  }
+  
+  .accessories-heading {
+    font-size: 18px;
+    color: #000880;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .accessory {
+    display: flex;
+    align-items: center;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .accessory img {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%;
+    margin-right: 10px;
+  }
+  
+  .accessory-details {
+    flex-grow: 1;
+  }
+  
+  h2, h3 {
+    color: #2c3e50; /* Dark grayish blue text color */
+  }
+  
+  input {
+    width: 40px;
+    padding: 5px;
+    border: 1px solid #95a5a6; /* Medium gray border */
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 5px;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:hover,
+  input:focus {
+    border-color: #3498db;
+  }
+  

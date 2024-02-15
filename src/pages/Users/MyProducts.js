@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Table, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Table } from 'reactstrap';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyProducts.css'; // Import your custom styles
 
@@ -7,6 +8,8 @@ const MyProducts = () => {
   const [userProducts, setUserProducts] = useState([]);
   const [selectedProductAccessories, setSelectedProductAccessories] = useState(null);
   const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const storedUserData = localStorage.getItem('userData');
   const { userName } = storedUserData ? JSON.parse(storedUserData) : {};
@@ -39,6 +42,16 @@ const MyProducts = () => {
     setPopupOpen(false);
   };
 
+  const handleAccessoriesClick = (productData) => {
+    setSelectedProductAccessories(productData);
+    setPopupOpen(true);
+  };
+
+  const handleServiceRequestClick = (productData) => {
+    // Use navigate to navigate to the /user/service-phases path
+    navigate('/user/service-phases');
+  };
+
   return (
     <div>
       <header>
@@ -61,6 +74,15 @@ const MyProducts = () => {
             <h2>{productData.Product}</h2>
             <img className="product-img" src={`C:/Users/User/Downloads/${productData.Product}.jpg`} alt={productData.Product} />
             <div className="accessories-heading">Click on the product to see the AccessoriesData</div>
+
+            <div className="buttons-container">
+              <Button color="primary" onClick={() => handleAccessoriesClick(productData)}>
+                Accessories
+              </Button>
+              <Button color="success" onClick={() => handleServiceRequestClick(productData)}>
+                Service Request
+              </Button>
+            </div>
           </div>
         ))}
       </div>
@@ -96,7 +118,6 @@ const MyProducts = () => {
             </Table>
           </div>
         </ModalBody>
-        <Button color="secondary" onClick={handleClosePopup}>Close</Button>
       </Modal>
     </div>
   );

@@ -62,6 +62,13 @@ header img {
   padding: 20px;
 }
 
+.buttons-container {
+  display: flex;
+  gap: 30px; /* Adjust the gap value based on your preference */
+  margin-top: 10px; /* Add margin to the top for space */
+}
+
+
 .product-column {
   flex: 0 0 45%;
   background-color: #ffffff;

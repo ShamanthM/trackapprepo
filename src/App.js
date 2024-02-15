@@ -8,6 +8,7 @@ import MyProducts from './pages/Users/MyProducts';
 import AllProducts from './pages/Products/AllProducts';
 import AssignProduct from './pages/Products/AssignProduct';
 import NewServiceRequest from './pages/ServiceRequests/newServiceRequest'; // Import the NewServiceRequest component
+import ServicePhases from './pages/Users/ServicePhases';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -93,6 +94,22 @@ function App() {
               )
             }
           />
+
+            {/* New route for Servie Phases */}
+          <Route
+            path="/user/service-phases"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <ServicePhases/>
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
           {/* New route for AssignProduct */}
           <Route
             path="/user/assign-product"

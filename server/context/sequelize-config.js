@@ -6,7 +6,7 @@ const sequelize = new Sequelize({
   port: 1433,
   database: 'testdb',
   username: 'akshay',
-  password: 'Quickcartdb98@',
+  password: 'Aksquickcart98@',
   define: {
     timestamps: false,
   },

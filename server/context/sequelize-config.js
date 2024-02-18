@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize({
-  dialect: 'mssql', // Use 'mssql' for Microsoft Azure SQL Database
+  dialect: 'mssql', 
   host: 'quickcart1.database.windows.net',
   port: 1433,
   database: 'testdb',
@@ -18,7 +18,7 @@ const sequelize = new Sequelize({
   },
   dialectOptions: {
     options: {
-      encrypt: true, // For Microsoft Azure SQL Database
+      encrypt: true, 
     },
   },
 });

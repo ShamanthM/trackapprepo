@@ -9,6 +9,7 @@ import AllProducts from './pages/Products/AllProducts';
 import AssignProduct from './pages/Products/AssignProduct';
 import NewServiceRequest from './pages/ServiceRequests/newServiceRequest'; // Import the NewServiceRequest component
 import ServicePhases from './pages/Users/ServicePhases';
+import InwardForm from './forms/InwardForm';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -103,6 +104,21 @@ function App() {
                 <>
                   <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
                   <ServicePhases/>
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+           {/* New route for Servie Phases */}
+           <Route
+            path="/user/inward-form"
+            element={
+              isAuthenticated ? (
+                <>
+                  <AuthConditionalNavbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+                  <InwardForm/>
                 </>
               ) : (
                 <Navigate to="/login" />

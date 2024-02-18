@@ -1,78 +1,99 @@
 // ServicePhases.js
-import React from 'react';
-import { Card, CardBody, CardTitle } from 'reactstrap';
-import './ServicePhases.css'; // Import the CSS file
+import React, { useState } from 'react';
+import { Container, Typography, Button, Link, Card, CardContent, Grid, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import './ServicePhases.css'; // Import your custom styles
 
 const ServicePhases = () => {
+  const [selectedPhase, setSelectedPhase] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const phases = [
+    { name: 'Reception', link: 'https://your-inward-form-link.com' },
+    { name: 'Evaluation' },
+    { name: 'Quotation', link: 'https://your-quotation-form-link.com' },
+    { name: 'Awaiting for the Work Order' },
+    { name: 'Service in Progress' },
+    { name: 'Calibration' },
+    { name: 'Packing' },
+    { name: 'Dispatched', link: 'https://your-outward-form-link.com' },
+    { name: 'Delivery' },
+  ];
+
+  const selectPhase = (phaseName) => {
+    setSelectedPhase(phaseName);
+    setOpenDialog(true);
+  };
+
+  const closeDeliveryPhase = () => {
+    setOpenDialog(false);
+  };
+
+  const handleYesClick = () => {
+    setOpenDialog(false);
+    const selectedCard = document.querySelector(`.phase-card[data-name="${selectedPhase}"]`);
+    if (selectedCard) {
+      selectedCard.classList.add('selected');
+    }
+  };
+
+  const handleNoClick = () => {
+    setOpenDialog(false);
+    const selectedCard = document.querySelector(`.phase-card[data-name="${selectedPhase}"]`);
+    if (selectedCard) {
+      selectedCard.classList.remove('selected');
+    }
+  };
+
   return (
-    <div>
-      <h2>Service Phases</h2>
-      <div className="service-phases-container">
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Reception</CardTitle>
-            {/* Additional content for the Reception phase */}
-          </CardBody>
-        </Card>
-
-        {/* Repeat similar Card components for other service phases */}
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Evaluation</CardTitle>
-            {/* Additional content for the Evaluation phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Quotation</CardTitle>
-            {/* Additional content for the Quotation phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Awaiting for the work order</CardTitle>
-            {/* Additional content for the Awaiting for the work order phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Service in Progress</CardTitle>
-            {/* Additional content for the Service in Progress phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Calibration</CardTitle>
-            {/* Additional content for the Calibration phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Packing</CardTitle>
-            {/* Additional content for the Packing phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Dispatched</CardTitle>
-            {/* Additional content for the Dispatched phase */}
-          </CardBody>
-        </Card>
-
-        <Card className="card">
-          <CardBody>
-            <CardTitle>Delivery</CardTitle>
-            {/* Additional content for the Delivery phase */}
-          </CardBody>
-        </Card>
-      </div>
-    </div>
+    <Container className="container" maxWidth="md">
+      <Typography variant="h2" align="center" gutterBottom>
+        SERVICE PHASES
+      </Typography>
+      <Grid container spacing={2}>
+        {phases.map((phase, index) => (
+          <Grid key={index} item xs={12} sm={6} md={4}>
+            <Card
+              className={`phase-card ${selectedPhase === phase.name ? 'selected' : ''}`}
+              data-name={phase.name}
+              onClick={() => selectPhase(phase.name)}
+            >
+              <CardContent>
+                <Typography variant="h4">{phase.name}</Typography>
+                {phase.link && (
+                  <Typography>
+                    <Link href={phase.link} target="_blank" rel="noopener noreferrer">
+                      {`Fill ${phase.name} Form`}
+                    </Link>
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Dialog open={openDialog} onClose={closeDeliveryPhase} maxWidth="xs" fullWidth>
+        <DialogTitle>
+          <Typography variant="h6">{`You selected: ${selectedPhase}`}</Typography>
+          <IconButton sx={{ position: 'absolute', right: 0, top: 0 }} onClick={closeDeliveryPhase} aria-label="close">
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          {/* Add content for the selected phase */}
+          <Typography variant="body1">Customize this content as needed</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleYesClick} variant="contained" color="success" startIcon={<CheckIcon />}>
+            Yes
+          </Button>
+          <Button onClick={handleNoClick} variant="contained" color="error">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 
